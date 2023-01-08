@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,28 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Promotion {
+  id              Int            @id @default(autoincrement())
+  type            Int
+  name            String         @unique(map: "sqlite_autoindex_promotions_1")
+  startDate       DateTime       @default(now()) @map("start_date")
+  description     String?
+  endDate         DateTime       @default(now()) @map("end_date")
+  targets         String
+  discountPerCent Float          @default(0) @map("discount_per_cent")
+  available       Boolean        @default(false)
+  discountFixed   Float          @default(0) @map("discount_fixed")
+  promotionsTypes PromotionType? @relation(fields: [type], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("promotions")
+}
+
+model PromotionType {
+  id         Int         @id @default(autoincrement())
+  type       String      @unique(map: "sqlite_autoindex_promotions_types_1")
+  promotions Promotion[]
+
+  @@map("promotions_types")
 }
