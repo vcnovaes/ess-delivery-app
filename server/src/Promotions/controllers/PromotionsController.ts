@@ -1,23 +1,31 @@
-import type { Request, Response } from "express";
-import type { Promotions } from "@prisma/client";
-import { insertPromotion } from "../models/PromotionsModels";
+import { Request, Response } from "express";
+import { Promotion } from "@prisma/client";
+import { getAllPromotions, insertPromotion } from "../models/PromotionsModel";
 
-export function getPromotions(req: Request, res: Response) { }
-
-export function getPromotion(req: Request, res: Response) { }
-
-export function deletePromotion(req: Request, res: Response) { }
-
-export function updatePromotion(req: Request, res: Response) { }
-
-export async function createPromotion(req: Request, res: Response) {
+export async function getPromotionsController(req: Request, res: Response) {
     try {
-        const promotion: Promotions = JSON.parse(req.body)
-        await insertPromotion(promotion)
-        res.send(200)
+        const allPromotions = await getAllPromotions()
+        res.send(allPromotions)
+        res.sendStatus(200)
     } catch (error) {
-        console.error(error)
-        res.send(500)
-        throw error('Insertion failed')
+        console.error('Not possible to list promotions', error)
+        res.sendStatus(500)
+    }
+}
+
+export function getPromotionController(req: Request, res: Response) { }
+
+export function deletePromotionController(req: Request, res: Response) { }
+
+export function updatePromotionController(req: Request, res: Response) { }
+
+export async function createPromotionController(req: Request, res: Response) {
+    try {
+        const promotion: Promotion = req.body
+        await insertPromotion(promotion)
+        res.sendStatus(200)
+    } catch (error) {
+        console.error(error, 'Bad Request')
+        res.sendStatus(400)
     }
 }

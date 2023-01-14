@@ -8,17 +8,17 @@ datasource db {
 }
 
 model Promotion {
-  id              Int            @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   type            Int
-  name            String         @unique(map: "sqlite_autoindex_promotions_1")
-  startDate       DateTime       @default(now()) @map("start_date")
+  name            String        @unique(map: "sqlite_autoindex_promotions_1")
+  startDate       DateTime      @default(now()) @map("start_date")
   description     String?
-  endDate         DateTime       @default(now()) @map("end_date")
+  endDate         DateTime      @default(now()) @map("end_date")
   targets         String
-  discountPerCent Float          @default(0) @map("discount_per_cent")
-  available       Boolean        @default(false)
-  discountFixed   Float          @default(0) @map("discount_fixed")
-  promotionsTypes PromotionType? @relation(fields: [type], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  discountPerCent Float         @default(0) @map("discount_per_cent")
+  available       Boolean       @default(false)
+  discountFixed   Float         @default(0) @map("discount_fixed")
+  promotionsTypes PromotionType @relation(fields: [type], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("promotions")
 }

@@ -1,8 +1,9 @@
 import express = require('express');
 import bodyParser = require("body-parser");
-import { promotionsRouter } from './src/components/promotions/routes/PromotionsRouter';
+
 import { CarService } from './src/cars-service';
 import { Car } from './src/car';
+import { promotionsRouter } from './src/Promotions/routes/PromotionsRouter';
 
 var app = express();
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 
 app.use('/promotions', promotionsRouter);
 
+
 var server = app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
@@ -25,5 +27,6 @@ var server = app.listen(3000, function () {
 function closeServer(): void {
   server.close();
 }
+
 
 export { app, server, closeServer }

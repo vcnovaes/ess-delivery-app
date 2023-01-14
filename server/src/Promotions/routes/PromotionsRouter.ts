@@ -1,18 +1,16 @@
 import express = require('express');
-import { createPromotion, getPromotion, getPromotions, updatePromotion } from '../controllers/PromotionsController';
+import { createPromotionController, getPromotionsController, getPromotionController, updatePromotionController } from '../controllers/PromotionsController';
 
-const promotionsRouter = express.Router()
-    .get('/', getPromotions)
+export const promotionsRouter = express.Router()
+    .get('/', getPromotionsController)
 
-    .get('/:id', getPromotion)
+    .get('/:id', getPromotionController)
 
-    .post('/', createPromotion)
+    .post('/', createPromotionController)
 
     .delete('/:id', (req, res) => {
         res.send(`Deleting promotion ${req.params}`)
     })
 
-    .put('/:id', updatePromotion)
+    .put('/:id', updatePromotionController)
 
-
-export { promotionsRouter }
