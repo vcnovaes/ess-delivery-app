@@ -37,6 +37,6 @@ export default class UserService {
   }
 
   static deleteUser(email: string) {
-      
+
   }
 }
