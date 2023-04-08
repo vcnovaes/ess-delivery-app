@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PromotionItem from "./PromotionsItem";
-import PromotionForm from "./PromotionsForm";
 import axios from "axios";
+import styled from "styled-components";
 import { Promotion } from "./promotion.type";
 
 const API_URL = "http://localhost:8081/promotions";
@@ -21,8 +21,23 @@ const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
 
     const fetchPromotions = async () => {
         try {
+            console.info("Fetching promoitions")
             const response = await axios.get<Promotion[]>(API_URL);
-            setPromotions(response.data);
+            console.info(response.data)
+            const newPromotion: Promotion[] = (response.data as any).map((d: any) => {
+
+                return {
+                    id: (d as any).id,
+                    name: (d as any).name,
+                    userEmail: (d as any).user_email,
+                    value: (d as any).value,
+                    isPercent: true,
+                    category: (d as any).category_name,
+                    active: (d as any).active
+                }
+
+            })
+            setPromotions(newPromotion);
             setIsLoading(false);
         } catch (error) {
             console.error(error);
@@ -31,6 +46,7 @@ const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
 
     const addPromotion = async (promotion: Promotion) => {
         try {
+            console.info(promotion)
             const response = await axios.post<Promotion>(API_URL, promotion);
             setPromotions([...promotions, response.data]);
         } catch (error) {
@@ -62,7 +78,7 @@ const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
 
     return (
         <div>
-            <h2>Promotions</h2>
+            <h2>Registred Promotions</h2>
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
@@ -72,12 +88,15 @@ const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
                             <PromotionItem
                                 key={promotion.id}
                                 promotion={promotion}
-                                onUpdate={(p) => updatePromotion(promotion.id!, p)}
+                                onUpdate={(p) => {
+                                    if (p.id)
+                                        updatePromotion(p.id, promotion)
+
+                                }}
                                 onDelete={() => deletePromotion(promotion.id!)}
                             />
                         ))}
                     </ul>
-                    <PromotionForm onSubmit={addPromotion} />
                 </>
             )}
         </div>

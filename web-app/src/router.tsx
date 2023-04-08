@@ -2,10 +2,12 @@ import {
   Route,
   createRoutesFromElements,
   createBrowserRouter,
+  Router,
 } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SupplierLayout from "./components/SupplierLayout";
 import LoginSuppliers from "./pages/LoginSuppliers/LoginSuppliers";
+import Promotions from "./pages/promotions/Promotions";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,7 +19,7 @@ const router = createBrowserRouter(
         <Route path="/search" element={<h1>Search Listing</h1>} />
         <Route path="/supplier/login" element={<LoginSuppliers onLogin={function (token: string): void {
           throw new Error("Function not implemented.");
-        } } />}/>
+        }} />} />
       </Route>
       <Route
         path="/supplier"
@@ -27,8 +29,9 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         }
       >
-        <Route path="/supplier/dashboard" element={<h1>Dashboard Page</h1>}/>
+        <Route path="/supplier/dashboard" element={<h1>Dashboard Page</h1>} />
       </Route>
+      <Route path="/promotions" element={<Promotions />} />
     </Route>
   )
 );

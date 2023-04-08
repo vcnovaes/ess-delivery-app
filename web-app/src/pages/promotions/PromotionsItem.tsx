@@ -9,7 +9,7 @@ interface PromotionItemProps {
 
 const PromotionItem = ({ promotion, onUpdate, onDelete }: PromotionItemProps) => {
     const [name, setName] = useState(promotion.name);
-    const [user, setUser] = useState(promotion.user);
+    const [user, setUser] = useState(promotion.userEmail);
     const [value, setValue] = useState(promotion.value);
     const [isPercent, setIsPercent] = useState(promotion.isPercent);
     const [category, setCategory] = useState(promotion.category);
@@ -19,7 +19,7 @@ const PromotionItem = ({ promotion, onUpdate, onDelete }: PromotionItemProps) =>
     onUpdate({
         ...promotion,
         name,
-        user,
+        userEmail: user,
         value,
         isPercent,
         category,

@@ -6,11 +6,20 @@ import { Links } from './pages/components/links/Links';
 import { Register } from './pages/register/Register';
 import { MainSupplier } from './pages/main_fornecedores/MainSupplier';
 import { Categories } from './pages/categories/Categories';
-import Promotions from './pages/promotions/Promotions';
+import router from './router';
 function App() {
   return (
     <div>
-      <Promotions />
+      <header>
+        <nav>
+          {/* Navigation Links */}
+        </nav>
+      </header>
+      <main>
+      </main>
+      <footer>
+        {/* Footer Content */}
+      </footer>
     </div>
   );
 }

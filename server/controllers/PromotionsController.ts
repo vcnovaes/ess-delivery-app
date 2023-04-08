@@ -64,8 +64,11 @@ export class PromotionsController {
   }
   public static async savePromotion(req: Request, res: Response) {
     let promotion: Promotion = (req.body as Promotion)
-    promotion.categoryId = (await CategoryService.getCategories()).find((cat) => cat.name === promotion.category).id
-
+    promotion.categoryId = (await CategoryService.getCategories()).find((cat) => cat.name === promotion.category)?.id ?? undefined
+    if (!promotion.categoryId) {
+      res.sendStatus(400)
+      return;
+    }
     try {
       await new PromotionsService().insert(promotion)
       res.sendStatus(201)
