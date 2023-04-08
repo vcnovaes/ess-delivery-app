@@ -9,18 +9,9 @@ import { Categories } from './pages/categories/Categories';
 import router from './router';
 function App() {
   return (
-    <div>
-      <header>
-        <nav>
-          {/* Navigation Links */}
-        </nav>
-      </header>
-      <main>
-      </main>
-      <footer>
-        {/* Footer Content */}
-      </footer>
-    </div>
+      <div>
+        <Register />
+      </div>
   );
 }
 
