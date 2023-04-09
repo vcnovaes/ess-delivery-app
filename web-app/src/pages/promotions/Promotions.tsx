@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Promotion } from "./promotion.type";
 import PromotionForm from "./PromotionsForm";
 import PromotionList from "./PromotionsList";
+import styles from './Promotions.module.css'
+import { Header } from "../components/header/Header";
+import { Links } from "../components/links/Links";
 
 const Promotions = () => {
     const [promotions, setPromotions] = useState<Promotion[]>([]);
     const fetchPromotions = async () => {
-
         const newPromotions = await getNewPromotions()
         console.info(newPromotions)
         setPromotions(newPromotions);
@@ -51,13 +53,19 @@ const Promotions = () => {
     };
 
     return (
-        <div>
-            <h1>Promotions</h1>
-            <PromotionForm onSubmit={fetchPromotions} />
-            <PromotionList
-                promotions={promotions}
-            />
-        </div>
+        <>
+            <Header />
+            <Links />
+            <div style={{ display: 'flex' }} className={styles.promotion}>
+                <div style={{ flex: 1 }} >
+                    <h2>Create Promotion</h2>
+                    <PromotionForm onSubmit={fetchPromotions} />
+                </div>
+                <div style={{ flex: 1 }}>
+                    <PromotionList promotions={promotions} />
+                </div>
+            </div>
+        </>
     );
 };
 

@@ -3,7 +3,7 @@ import PromotionItem from "./PromotionsItem";
 import axios from "axios";
 import styled from "styled-components";
 import { Promotion } from "./promotion.type";
-
+import styles from "./Promotions.module.css"
 const API_URL = "http://localhost:8080/promotions";
 interface PromotionListProps {
     promotions: Promotion[];
@@ -79,29 +79,48 @@ const PromotionList = ({ }: PromotionListProps) => {
     };
 
     return (
-        <div>
-            <h2>Registred Promotions</h2>
+        <div className={styles.promotionList}>
+            <h3>Registered Promotions</h3>
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
-                <>
-                    <ul>
-                        {promotions.map((promotion: Promotion) => (
-                            <PromotionItem
-                                key={promotion.id}
-                                promotion={promotion}
-                                onSave={(p) => {
-                                    if (p.id)
-                                        updatePromotion(p)
+                <div className={styles.tableWrapper}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Value</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {promotions.map((promotion: Promotion) => (
+                                <tr key={promotion.name}>
+                                    <td>{promotion.name}</td>
+                                    <td>{promotion.category}</td>
+                                    <td>{promotion.value}</td>
+                                    <td>{(promotion.active) ? "Yes" : "No"}</td>
+                                    <td>
+                                        <PromotionItem
+                                            key={promotion.id}
+                                            promotion={promotion}
+                                            onSave={(p) => {
+                                                if (p.id)
+                                                    updatePromotion(p)
 
-                                }}
-                                onDelete={() => deletePromotion(promotion.id!)}
-                            />
-                        ))}
-                    </ul>
-                </>
+                                            }}
+                                            onDelete={() => deletePromotion(promotion.id!)}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
+
     );
 };
 

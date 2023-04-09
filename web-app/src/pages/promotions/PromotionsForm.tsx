@@ -22,16 +22,15 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
 
     const [name, setName] = useState("");
     const [value, setValue] = useState(0);
-    const [isPercent, setIsPercent] = useState(false);
+    const [isPercent, setIsPercent] = useState(true);
     const [category, setCategory] = useState("");
     const [active, setActive] = useState(false);
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         addPromotion({ name, userEmail: user, value, isPercent, category, active })
         setName("");
         setValue(0);
-        setIsPercent(false);
+        setIsPercent(true);
         setCategory("");
         setActive(false);
         onSubmit();
@@ -53,7 +52,6 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
 
     return (
         <StyledForm onSubmit={handleSubmit}>
-            <h2>Add Promotion</h2>
             <StyledFormGroup>
                 <StyledLabel htmlFor="name">Name:</StyledLabel>
                 <StyledInput
@@ -79,13 +77,6 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
                     value={value}
                     onChange={(e) => setValue(Number(e.target.value))}
                 />
-                <StyledCheckbox
-                    type="checkbox"
-                    id="isPercent"
-                    checked={isPercent}
-                    onChange={(e) => setIsPercent(e.target.checked)}
-                />
-                <StyledLabel htmlFor="isPercent">Percentage</StyledLabel>
             </StyledFormGroup>
             <StyledFormGroup>
                 <StyledLabel htmlFor="category">Category:</StyledLabel>
@@ -96,16 +87,16 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
                     onChange={(e) => setCategory(e.target.value)}
                 />
             </StyledFormGroup>
-            <StyledFormGroup>
-                <StyledCheckbox
-                    type="checkbox"
-                    id="active"
-                    checked={active}
-                    onChange={(e) => setActive(e.target.checked)}
-                />
-                <StyledLabel htmlFor="active">Active</StyledLabel>
-            </StyledFormGroup>
+            <StyledLabel htmlFor="active">Active</StyledLabel>
+            <StyledCheckbox
+                type="checkbox"
+                id="active"
+                checked={active}
+                onChange={(e) => setActive(e.target.checked)}
+            />
+
             <StyledButton type="submit">Add</StyledButton>
+
         </StyledForm>
     );
 }
@@ -115,6 +106,8 @@ const StyledForm = styled.form`
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  margin-right: 200px;
 `;
 
 const StyledFormGroup = styled.div`
@@ -134,10 +127,14 @@ const StyledInput = styled.input`
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   `;
 
-const StyledCheckbox = styled.input`margin-right: 10px; `
+const StyledCheckbox = styled.input`margin-right: 200px; 
+    margin-left:20px;
+
+`
 
 const StyledButton = styled.button`
   padding: 10px 20px;
+  margin-left: 50px;
   border-radius: 5px;
   border: none;
   background-color: #4caf50;
