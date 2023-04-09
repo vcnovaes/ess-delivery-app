@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Promotion } from "./promotion.type";
 import styled from "styled-components";
 import axios from "axios";
+import CategoryService from "../../services/api/category.service";
+import { AuthContext } from "../../context/auth";
 interface PromotionFormProps {
-    onSubmit: (promotion: Promotion) => void;
+    onSubmit: () => void;
 }
 
-const API_URL = "http://localhost:8081/promotions";
+const API_URL = "http://localhost:8080/promotions";
 const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
+    let { user } = useContext(AuthContext);
+    let token = "NONE"
+
+    if (!user) {
+        /**
+         *  NOT AUTHENTICATED YET
+        */
+        user = "mockUser"
+    } else { token = user.token }
+
     const [name, setName] = useState("");
-    const [user, setUser] = useState("");
     const [value, setValue] = useState(0);
     const [isPercent, setIsPercent] = useState(false);
     const [category, setCategory] = useState("");
@@ -17,14 +28,13 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onSubmit({ name, userEmail: user, value, isPercent, category, active });
         addPromotion({ name, userEmail: user, value, isPercent, category, active })
         setName("");
-        setUser("");
         setValue(0);
         setIsPercent(false);
         setCategory("");
         setActive(false);
+        onSubmit();
 
     };
     const addPromotion = async (promotion: Promotion) => {
@@ -59,7 +69,6 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
                     type="text"
                     id="user"
                     value={user}
-                    onChange={(e) => setUser(e.target.value)}
                 />
             </StyledFormGroup>
             <StyledFormGroup>
@@ -139,3 +148,4 @@ const StyledButton = styled.button`
   &:hover {
   background-color: #3e8e41;
   }}`
+
