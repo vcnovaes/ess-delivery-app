@@ -66,15 +66,15 @@ export default class PromotionsService {
       }
     )
   }
-  public update(promotion: Promotion) {
+  public async update(promotion: Promotion) {
     return new Promise<boolean>(
       (resolve, reject) => {
         this.dbClient.connect()
-          .run(`UPDATE promotions SET name=(?) , value=(?), is_percent=(?), category_id=(?) active=(?) WHERE id=(?)`,
+          .run(`UPDATE promotions SET name=(?) , value=(?), is_percent=(?), category_id=(?), active=(?) WHERE id=(?)`,
             [
               promotion.name,
               promotion.value,
-              promotion.isPercent,
+              promotion.isPercent ? 1 : 0,
               promotion.categoryId,
               promotion.active,
               promotion.id

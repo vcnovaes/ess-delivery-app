@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import CategoryService from "../models/Category.js"
 import PromotionsService from "../models/Promotions.js"
+import { category } from "../routes/index.js"
 import { Promotion } from "../types/promotions.js"
 class InvalidParameterError extends Error {
   constructor(message: string) {
@@ -64,6 +65,8 @@ export class PromotionsController {
   }
   public static async savePromotion(req: Request, res: Response) {
     let promotion: Promotion = (req.body as Promotion)
+    console.info("Saving this promotion:", promotion)
+    if (!promotion.user) promotion.user = (promotion as any).userEmail
     promotion.categoryId = (await CategoryService.getCategories()).find((cat) => cat.name === promotion.category)?.id ?? undefined
     if (!promotion.categoryId) {
       res.sendStatus(400)
@@ -82,6 +85,12 @@ export class PromotionsController {
 
     try {
       const promotion = PromotionsController.validatePromotionBody(req)
+      console.info("Updating promotion:", promotion)
+      promotion.categoryId = (await CategoryService.getCategories()).find((cat) => cat.name === promotion.category)?.id ?? undefined
+      if (!promotion.categoryId) {
+        res.status(400).send("Category id is undefined")
+        return;
+      }
       const updated = await new PromotionsService().update(promotion)
       if (updated) {
         res.sendStatus(204)
