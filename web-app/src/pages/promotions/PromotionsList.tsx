@@ -4,14 +4,13 @@ import axios from "axios";
 import styled from "styled-components";
 import { Promotion } from "./promotion.type";
 
-const API_URL = "http://localhost:8081/promotions";
+const API_URL = "http://localhost:8080/promotions";
 interface PromotionListProps {
     promotions: Promotion[];
-    onUpdate: (promotion: Promotion) => void;
-    onDelete: (id: number) => void;
+
 }
 
-const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
+const PromotionList = ({ }: PromotionListProps) => {
     const [promotions, setPromotions] = useState<Promotion[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -21,7 +20,6 @@ const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
 
     const fetchPromotions = async () => {
         try {
-            console.info("Fetching promoitions")
             const response = await axios.get<Promotion[]>(API_URL);
             console.info(response.data)
             const newPromotion: Promotion[] = (response.data as any).map((d: any) => {
@@ -54,12 +52,16 @@ const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
         }
     };
 
-    const updatePromotion = async (id: number, promotion: Promotion) => {
+    const updatePromotion = async (promotion: Promotion) => {
         try {
-            await axios.put(`${API_URL}/${id}`, promotion);
-            const newPromotions = promotions.map((p) =>
-                p.id === id ? { ...p, ...promotion } : p
-            );
+            console.info("Trying to update promotion")
+            await axios.put(`${API_URL}/`, promotion);
+            const newPromotions = promotions.map((promo) => {
+                if (promo.id === promotion.id) {
+                    return promotion
+                }
+                return promo;
+            })
             setPromotions(newPromotions);
         } catch (error) {
             console.error(error);
@@ -88,9 +90,9 @@ const PromotionList = ({ onUpdate, onDelete }: PromotionListProps) => {
                             <PromotionItem
                                 key={promotion.id}
                                 promotion={promotion}
-                                onUpdate={(p) => {
+                                onSave={(p) => {
                                     if (p.id)
-                                        updatePromotion(p.id, promotion)
+                                        updatePromotion(p)
 
                                 }}
                                 onDelete={() => deletePromotion(promotion.id!)}
