@@ -86,8 +86,8 @@ const PromotionItem = ({ promotion, onSave, onDelete }: PromotionItemProps) => {
                     />
                 </div>
                 <div className="form-actions">
-                    <button type="submit" className="btn btn-primary">Save</button>
-                    <button type="button" onClick={onDelete} className="btn btn-danger">Delete</button>
+                    <button type="submit" className="btn btn-primary" id="save-btn">Save</button>
+                    <button type="button" onClick={onDelete} className="btn btn-danger" id="delete-btn">Delete</button>
                 </div>
             </form>)}
         </>
