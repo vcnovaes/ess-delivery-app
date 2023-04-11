@@ -18,4 +18,6 @@ describe("Promotions", () => {
         cy.get("#add-btn").click()
         cy.reload()
     })
+
+
 })
