@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Item } from '../../../server/types/item'
-import { Header } from './components/header/Header';
+import { SimpleHeader } from './components/header/SimpleHeader';
 import { Footer } from './components/footer/Footer';
 import { NavBar } from './components/navbar/NavBar';
 
@@ -37,7 +37,7 @@ export const Home = () => {
 
   return (
         <div>
-            <Header/>
+            <SimpleHeader/>
             <NavBar/>
             <div className='home-grid-container'>
                 {items.map(item => (
