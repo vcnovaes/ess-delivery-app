@@ -85,7 +85,7 @@ const PromotionList = ({ }: PromotionListProps) => {
                 <p>Loading...</p>
             ) : (
                 <div className={styles.tableWrapper}>
-                    <table>
+                    <table id="promo-table">
                         <thead>
                             <tr>
                                 <th>Name</th>
