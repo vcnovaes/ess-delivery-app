@@ -8,8 +8,11 @@ const router = Router();
 router.get('/getCategories', async (req: Request, res: Response) => {
     const { supplierId } = req.query;
 
+    let supId = undefined;
+    if(supplierId) supId = Number(supplierId);
+
     try {
-        const categories = await CategoryService.getCategories(Number(supplierId));
+        const categories = await CategoryService.getCategories(supId);
         console.log(categories);
         return res.status(200).send(categories);
     }
@@ -25,7 +28,6 @@ router.get('/getCategories', async (req: Request, res: Response) => {
 router.get('/getCategory/:id', async (req: AuthMiddlewareReq, res: Response) => {
     const { id } = req.params;
 
-
     try {
         const category = await CategoryService.getCategory(Number(id));
         if(category.supplierId !== req.supplierId) {
@@ -34,7 +36,7 @@ router.get('/getCategory/:id', async (req: AuthMiddlewareReq, res: Response) => 
                 errorType: 'not allowed',
             });
         }
-        
+
         return res.status(200).send(category);
     }
     catch (err) {
@@ -48,7 +50,7 @@ router.get('/getCategory/:id', async (req: AuthMiddlewareReq, res: Response) => 
 router.post('/create', authMiddleware, async (req: AuthMiddlewareReq, res: Response) => {
     const { name, description } = req.body;
     console.log(req.body);
-    
+
     if(!name || !description) {
         return res.status(422).send({
             message: "Not valid name or description.",
@@ -81,7 +83,7 @@ router.post('/create', authMiddleware, async (req: AuthMiddlewareReq, res: Respo
 });
 
 router.put('/update/:id', authMiddleware, async (req: AuthMiddlewareReq, res: Response) => {
-    const { id } = req.params; 
+    const { id } = req.params;
     const { name, description } = req.body;
 
     if(!name || !description) {
@@ -135,7 +137,7 @@ router.delete('/delete/:id', authMiddleware, async (req: AuthMiddlewareReq, res:
         }
 
         await CategoryService.deleteCategory(Number(id));
-        
+
         return res.status(200).send({
             message: "Deleted category with success."
         });

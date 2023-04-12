@@ -9,17 +9,17 @@ const router = Router();
 
 router.get("/getItems", async (req, res) => {
     const { supplierId, search } = req.query;
-    
-    let query = '';
+    let query = undefined;
     if(search) query = <string>search;
 
     let supId = undefined;
     if(supplierId) supId = Number(supplierId);
-    
+
+    console.log(supId)
     try {
         const items = await ItemService.getItems(query, supId);
-
-        return res.status(200).json(items);
+        console.log("ITEMS", items);
+        return res.status(200).send(items);
     } catch (err) {
         console.error(err);
 
@@ -48,19 +48,26 @@ router.get("/getItem/:id", async (req, res) => {
 });
 
 router.post("/create", authMiddleware, async (req: AuthMiddlewareReq, res) => {
-    const { name, desc, picture, price, inStock, categoriesIds } = req.body;
+    const { name, desc, picture, price, inStock, categories } = req.body;
 
     const item: Partial<Item> = {
         name,
         price,
         inStock,
         supplierId: req.supplierId,
-        categories: categoriesIds
+        categories
     };
 
     // Optional Attributes
     if (desc) item.desc = desc;
     if (picture) item.picture = picture;
+
+    if (!name || !desc || !price || !categories) {
+        return res.status(422).send({
+            message: "Invalid product data.",
+            errorType: 'validation',
+        });
+    }
 
     if (price <= 0) {
         return res.status(422).send({

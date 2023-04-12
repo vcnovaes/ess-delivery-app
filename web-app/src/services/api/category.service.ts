@@ -17,7 +17,9 @@ class CategoryService {
     const query = supplierId ? `?supplierId=${supplierId}` : '';
     try {
       const resp: DataResponse<Category[]> = await fetch(this.url + "/getCategories" + query, {
-        headers: this.headers,
+        headers: {
+          'Content-Type': 'application/json'
+        },
       }).then((res) => res.json());
 
       return resp;
@@ -81,7 +83,7 @@ class CategoryService {
     } catch (e) {
       console.log(e);
       return { message: "Something went wrong!" };
-    } 
+    }
   }
 }
 

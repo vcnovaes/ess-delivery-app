@@ -4,7 +4,9 @@ import { DataResponse, OperationResponse } from "../../types/api";
 class ItemService {
   private token: string | undefined;
   private url = process.env.REACT_APP_API_URL + "/item";
-  private headers: any = {};
+  private headers: any = {
+    'Content-Type': 'application/json'
+  }
 
   constructor(token?: string) {
     this.token = token;
@@ -12,11 +14,11 @@ class ItemService {
   }
 
   async getAll(query?: string, supplierId?: number): Promise<DataResponse<Item[]>> {
-    let filters = query ? `query=${query}` : "";
+    let filters = query ? `search=${query}` : "";
     filters += supplierId
     ? `${filters ? "&" : ""}supplierId=${supplierId}`
     : "";
-    
+
     try {
       const resp: DataResponse<Item[]> = await fetch(
         this.url + "/getItems" + (filters ? `?${filters}` : "")
@@ -42,7 +44,7 @@ class ItemService {
     }
   }
 
-  async add(data: AddItem) {
+  async add(data: Partial<AddItem>) {
     try {
       const resp: OperationResponse = await fetch(this.url + `/create`, {
         method: "POST",

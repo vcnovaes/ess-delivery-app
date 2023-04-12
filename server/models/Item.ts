@@ -13,8 +13,7 @@ export default class ItemService {
     this.itemData = { ...data };
   }
 
-  static insertItem(data: ItemData) {
-    // @ts-ignore
+  static async insertItem(data: ItemData) {
     const db = new DBClient(<string>envs.DATABASE_URL).connect();
 
     const itemData = data;
@@ -23,49 +22,60 @@ export default class ItemService {
 
     const { mappedKeys, mappedValues } = mapObjectToString(itemData);
 
-    let catString = categories.reduce((prev, val, i) => {
-      return (
-        prev + `(${data.id}, ${val})${i !== categories.length - 1 ? "," : ""}`
+    await new Promise<any>((resolve, reject) => {
+      db.run(
+        `INSERT INTO Item(${mappedKeys}) VALUES(${mappedValues})`,
+        (err: any) => {
+
+          if (err) {
+            reject(err);
+          }
+
+          resolve(true);
+        }
       );
-    }, "");
+    });
 
-    return Promise.all([
-      new Promise<any>((resolve, reject) => {
-        db.run(
-          `INSERT INTO Category(${mappedKeys}) VALUES(${mappedValues})`,
-          (err: any) => {
-            db.close();
-
-            if (err) {
-              reject(err);
-            }
-
-            resolve(true);
+    const dataId = await new Promise<any>((resolve, reject) => {
+      db.get(
+        `SELECT MAX(id) as id FROM Item LIMIT 1;`,
+        (err: any, data: any) => {
+          if (err) {
+            reject(err);
           }
+
+          resolve(data);
+        }
+      );
+    });
+
+    let catString = categories ? categories?.reduce((prev, val, i) => {
+      return (
+        prev + `(${dataId.id}, ${val})${i !== categories.length - 1 ? "," : ""}`
         );
-      }),
-      new Promise<any>((resolve, reject) => {
-        db.run(
-          `INSERT INTO ItemCategory(itemId, categoryId) VALUES ${catString}`,
-          (err: any) => {
-            db.close();
+      }, "") : '';
 
-            if (err) {
-              reject(err);
-            }
+    await new Promise<any>((resolve, reject) => {
+      db.run(
+        `INSERT INTO ItemCategory(itemId, categoryId) VALUES ${catString}`,
+        (err: any) => {
+          db.close();
 
-            resolve(true);
+          if (err) {
+            reject(err);
           }
-        );
-      }),
-    ]);
+
+          resolve(true);
+        }
+      );
+    })
   }
 
   static async updateItemCategories(categories: any[], itemId: any) {
     // @ts-ignore
     const db = new DBClient(<string>envs.DATABASE_URL).connect();
 
-    const catString = categories.reduce((prev: string, val: string, i) => {
+    const catString = categories?.reduce((prev: string, val: string, i) => {
       return (
         prev + `(${itemId}, ${val})${i !== categories.length - 1 ? "," : ""}`
       );
@@ -76,7 +86,6 @@ export default class ItemService {
       db.run(
         `DELETE FROM ItemCategory WHERE itemId = ${itemId}`,
         (err: any) => {
-          db.close();
 
           if (err) {
             reject(err);
@@ -116,7 +125,7 @@ export default class ItemService {
 
     return new Promise<any>((resolve, reject) => {
       db.run(
-        `UPDATE Category SET ${mappedObjToString} WHERE id = ${itemData.id}`,
+        `UPDATE Item SET ${mappedObjToString} WHERE id = ${itemData.id}`,
         (err: any) => {
           db.close();
 
@@ -170,7 +179,7 @@ export default class ItemService {
 
     const categories = await new Promise<any>((resolve, reject) => {
       db.get(
-        `SELECT * FROM ItemCategory LEFT OUTER JOIN Promototion
+        `SELECT * FROM ItemCategory LEFT OUTER JOIN Promotions
                 WHERE itemId = ${item.id}
                 ORDER BY value DSC`,
         (err: any, data: any) => {
@@ -224,7 +233,7 @@ export default class ItemService {
     const categoryPromotions = await new Promise<any[]>((resolve, reject) => {
       db.get(
         `SELECT category_id, name, value, is_percent
-                FROM Promotion
+                FROM Promotions
                 WHERE active = 1
                 ORDER BY value DESC`,
         (err: any, data: any[]) => {
@@ -256,12 +265,12 @@ export default class ItemService {
       ? `${filters ? " AND " : ""}supplierId = ${supplierId}`
       : "";
 
+    console.log(filters);
+
     const items = await new Promise<ItemDB[]>((resolve, reject) => {
-      db.get(
-        `SELECT * FROM Item I
-            LEFT OUTER JOIN ItemCategory IC
-            ON I.id = IC.itemId
-            ${filters ? `WHERE ${filters}` : ""}`,
+      db.all(
+        `SELECT * FROM Item
+        ${filters ? `WHERE ${filters}` : ""}`,
         (err: any, data: ItemDB[]) => {
           db.close();
 
@@ -276,9 +285,6 @@ export default class ItemService {
     });
 
     if (!items) return [];
-
-    const promotions = await this.getCategoryPromotions();
-
-    return includePromotions(items, promotions);
+    return items;
   }
 }

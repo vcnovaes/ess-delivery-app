@@ -56,22 +56,6 @@ export const Products = () => {
     setLoading(false)
   }
 
-  const createHandler = async (data: AddItem) => {
-    setLoading(true)
-    let response: any = null
-
-    try {
-      response = await itemService.add(data)
-      setFeedback(response.message)
-      if (response.errorType) setError(true)
-    } catch (e) {
-      setFeedback(response.message)
-      setError(true)
-    }
-
-    setLoading(false)
-  }
-
   const updateHandler = async (id: number, data: Partial<AddItem>) => {
     setLoading(true)
     let response: any = null
@@ -132,11 +116,13 @@ export const Products = () => {
   function callCreateItem() {
     setSelectedEdit(false)
     return (
-      <CreateProduct
-        createHandler={createHandler}
-      />
+      <CreateProduct user={user} getItems={getItems}/>
     )
   }
+  console.log(items);
+  useEffect(() => {
+    getItems();
+  }, []);
 
   function callEditItem() {
     if (selectedEdit) {
