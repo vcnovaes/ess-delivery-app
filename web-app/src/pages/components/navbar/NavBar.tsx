@@ -10,6 +10,7 @@ export const NavLinks: Link[] = [
   { name: "Categorias", url: "/supplier/categories" },
   { name: "Promoções", url: "/promotions/" },
   { name: "Cadastro de Fornecedores", url: "/supplier/register" },
+  { name: "Login de Fornecedores", url: "/supplier/login" },
 ];
 
 export function NavBar() {
