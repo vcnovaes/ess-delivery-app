@@ -12,7 +12,7 @@ Feature: Login dos Fornecedores
 
   Scenario: Login com credenciais incorretas
     Given estou na página "LoginDeFornecedor"
-    When eu preencho o campo Email com o valor "rls7"
-    And eu preencho o campo Senha com o valor "abc123"
+    When eu preencho o campo Email com o valor "rebecca@gmail.com"
+    And eu preencho o campo Senha com o valor "1234abc"
     And eu seleciono a opção Login
     Then eu continuo na página de Login
