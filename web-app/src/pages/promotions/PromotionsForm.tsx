@@ -69,7 +69,7 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
                 <StyledLabel htmlFor="name">Name:</StyledLabel>
                 <StyledInput
                     type="text"
-                    id="name"
+                    id="f-name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
@@ -78,7 +78,7 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
                 <StyledLabel htmlFor="value">Value:</StyledLabel>
                 <StyledInput
                     type="number"
-                    id="value"
+                    id="f-value"
                     value={value}
                     onChange={(e) => setValue(Number(e.target.value))}
                 />
@@ -87,7 +87,7 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
                 <StyledLabel htmlFor="category">Category:</StyledLabel>
                 <StyledInput
                     type="text"
-                    id="category"
+                    id="f-category"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                 />
@@ -95,12 +95,12 @@ const PromotionForm = ({ onSubmit }: PromotionFormProps) => {
             <StyledLabel htmlFor="active">Active</StyledLabel>
             <StyledCheckbox
                 type="checkbox"
-                id="active"
+                id="f-active"
                 checked={active}
                 onChange={(e) => setActive(e.target.checked)}
             />
 
-            <StyledButton type="submit">Add</StyledButton>
+            <StyledButton type="submit" id="add-btn">Add</StyledButton>
 
         </StyledForm>
     );
