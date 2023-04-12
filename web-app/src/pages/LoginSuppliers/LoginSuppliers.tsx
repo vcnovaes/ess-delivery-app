@@ -30,7 +30,7 @@ const LoginSuppliers: React.FC = () => {
 
       if (response.errorType) setError(response.message);
       else {
-        alert("LOGADO!")
+        //alert("LOGADO!")
         console.log(response)
         login(response)
       }
@@ -70,7 +70,7 @@ const LoginSuppliers: React.FC = () => {
         </div>
         <br/>
         {error && <div>{error}</div>}
-        <button type="submit">Login</button>
+        <button id="login" type="submit">Login</button>
       </form>
     </div>
   );
