@@ -26,11 +26,11 @@ Given("estou na página {string}", (page) => {
 });
     
 When("eu preencho o campo Email com o valor {string}", (email) => {
-    cy.get('#email').type('bdljasd@gmail.com')
+    cy.get('#email').type('rebecca@gmail.com')
 });
 
 When("eu preencho o campo Senha com o valor {string}", (password) =>{
-    cy.get('#password').type('1234')
+    cy.get('#password').type('1234abc')
 });
 
 When("eu seleciono a opção Login",() => {
